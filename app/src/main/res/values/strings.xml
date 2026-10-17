@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MindAI</string>
+    <string name="notification_listener_label">MindAI 通知采集</string>
+    <string name="widget_name">MindAI</string>
+    <string name="widget_idle">暂无待整理</string>
+    <string name="widget_summarize">立即总结</string>
+    <string name="widget_previous_cycle">上一周期</string>
+    <string name="widget_latest_cycle">本轮</string>
+    <string name="widget_summary_placeholder">总结内容</string>
+</resources>

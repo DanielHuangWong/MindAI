@@ -1,0 +1,14 @@
+.gradle/
+.idea/
+.toolchains/
+local.properties
+**/build/
+*.iml
+captures/
+
+# Sensitive / internal — not for public repo
+design/
+docs/
+google-play/
+dist/
+.DS_Store

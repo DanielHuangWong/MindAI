@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+}
+
+def escapedBuildConfigValue = { String value ->
+    value.replace('\\', '\\\\').replace('"', '\\"')
+}
+def aiReportEndpoint = providers.gradleProperty('MINDAI_AI_REPORT_ENDPOINT')
+        .orElse(providers.environmentVariable('MINDAI_AI_REPORT_ENDPOINT'))
+        .getOrElse('')
+def privacyPolicyUrl = providers.gradleProperty('MINDAI_PRIVACY_POLICY_URL')
+        .orElse(providers.environmentVariable('MINDAI_PRIVACY_POLICY_URL'))
+        .getOrElse('')
+
+android {
+    namespace 'com.mindai.app'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.mindai.app'
+        minSdk 26
+        targetSdk 36
+        versionCode 19
+        versionName '1.8.0'
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField 'String', 'AI_REPORT_ENDPOINT', "\"${escapedBuildConfigValue(aiReportEndpoint)}\""
+        buildConfigField 'String', 'PRIVACY_POLICY_URL', "\"${escapedBuildConfigValue(privacyPolicyUrl)}\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+}
