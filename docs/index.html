@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindAI — 把通知变成记忆</title>
+<meta name="description" content="MindAI 是一款 Android 通知智能助手：本地过滤广告、AI 提炼重点、重要事项自动沉淀，原始数据端侧加密不出手机。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
+  :root {
+    --bg: #0e1116;
+    --bg-card: #161b22;
+    --bg-card2: #1c2330;
+    --text: #e6e9ef;
+    --text-dim: #9aa4b2;
+    --accent: #ffd23f;
+    --accent-dark: #c9a400;
+    --green: #3fb950;
+    --border: #2b3340;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    line-height: 1.65;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,17,22,.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .logo { font-weight: 700; font-size: 18px; color: var(--text); letter-spacing: .5px; }
+  .logo span { color: var(--accent); }
+  nav .links { display: flex; gap: 22px; font-size: 14px; }
+  nav .links a { color: var(--text-dim); }
+  nav .links a:hover { color: var(--text); text-decoration: none; }
+
+  /* Hero */
+  .hero { padding: 84px 0 56px; text-align: center; }
+  .hero h1 { font-size: 44px; line-height: 1.25; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .sub { font-size: 18px; color: var(--text-dim); max-width: 620px; margin: 0 auto 30px; }
+  .badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 34px; }
+  .badge {
+    font-size: 12.5px; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 4px 12px; background: var(--bg-card);
+  }
+  .badge b { color: var(--text); font-weight: 600; }
+  .cta-row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; font-weight: 600; font-size: 16px;
+    padding: 13px 30px; border-radius: 10px; cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #111; box-shadow: 0 4px 18px rgba(255,210,63,.25); }
+  .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,210,63,.4); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); background: var(--bg-card); }
+  .ver-note { margin-top: 16px; font-size: 13px; color: var(--text-dim); }
+
+  /* Sections */
+  section { padding: 56px 0; }
+  .sec-title { font-size: 26px; margin-bottom: 8px; }
+  .sec-desc { color: var(--text-dim); margin-bottom: 28px; font-size: 15px; }
+  .divider { border: none; border-top: 1px solid var(--border); }
+
+  /* Features */
+  .feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .feat {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .feat h3 { font-size: 15.5px; margin-bottom: 6px; }
+  .feat h3 .ico { margin-right: 6px; }
+  .feat p { font-size: 13.5px; color: var(--text-dim); }
+
+  /* Screens */
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .shots figure {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .shots img { width: 100%; display: block; aspect-ratio: 853/1844; object-fit: cover; object-position: top; }
+  .shots figcaption { font-size: 12.5px; color: var(--text-dim); padding: 8px 12px; }
+
+  /* Install steps */
+  .steps { counter-reset: step; display: grid; gap: 12px; max-width: 640px; }
+  .step {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+  }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    flex: 0 0 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: #111;
+    font-weight: 700; display: flex; align-items: center; justify-content: center;
+  }
+  .step h4 { font-size: 15px; margin-bottom: 3px; }
+  .step p { font-size: 13.5px; color: var(--text-dim); }
+
+  /* Security note */
+  .note {
+    background: var(--bg-card2); border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--text-dim);
+  }
+  .note b { color: var(--text); }
+
+  /* Verify */
+  .verify-box {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+  }
+  .verify-box .k { color: var(--text-dim); }
+  .verify-box .v { color: var(--accent); word-break: break-all; }
+  .verify-box .cmd { color: var(--green); }
+
+  /* Changelog */
+  .cl { border-left: 2px solid var(--border); padding-left: 22px; display: grid; gap: 18px; }
+  .cl-item { position: relative; }
+  .cl-item::before {
+    content: ''; position: absolute; left: -27px; top: 8px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  }
+  .cl-item h4 { font-size: 15px; }
+  .cl-item h4 span { color: var(--text-dim); font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .cl-item ul { margin: 4px 0 0 18px; font-size: 13.5px; color: var(--text-dim); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0 44px; text-align: center;
+    color: var(--text-dim); font-size: 13.5px;
+  }
+  footer .flinks { margin-bottom: 10px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+
+  @media (max-width: 720px) {
+    .hero h1 { font-size: 32px; }
+    .shots { grid-template-columns: repeat(2, 1fr); }
+    nav .links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">Mind<span>AI</span></div>
+    <div class="links">
+      <a href="#features">功能</a>
+      <a href="#screens">截图</a>
+      <a href="#install">安装</a>
+      <a href="#changelog">更新日志</a>
+      <a href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="wrap">
+    <h1>把<em>通知</em>变成<em>记忆</em></h1>
+    <p class="sub">MindAI 读取你授权的通知，本地过滤广告噪音，AI 提炼真正重要的事，自动沉淀为可追溯的记录。原始数据端侧加密，不出你的手机。</p>
+    <div class="badges">
+      <div class="badge">最新版本 <b>v1.8.0</b></div>
+      <div class="badge">Android <b>8.0+</b>（API 26）</div>
+      <div class="badge">开源协议 <b>MIT</b></div>
+      <div class="badge">数据 <b>端侧加密</b></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/DanielHuangWong/MindAI/releases/latest/download/MindAI.apk" target="_blank" rel="noopener">⬇ 下载 APK</a>
+      <a class="btn btn-ghost" href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">⭐ GitHub 源码</a>
+    </div>
+    <p class="ver-note">AI 功能需自备 <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a> API Key · 下载文件名固定为 MindAI.apk，发新版无需改链接</p>
+  </div>
+</header>
+
+<hr class="divider">
+
+<!-- Features -->
+<section id="features">
+  <div class="wrap">
+    <h2 class="sec-title">功能</h2>
+    <p class="sec-desc">通知只是过客，被提炼出来的才留下来。</p>
+    <div class="feat-grid">
+      <div class="feat"><h3><span class="ico">📥</span>通知采集</h3><p>授权通知监听后读取通知，未经你触发总结，内容不出设备。</p></div>
+      <div class="feat"><h3><span class="ico">🧹</span>广告过滤</h3><p>本地价值门槛先行剔除广告、营销和低信号通知，不浪费一次 AI 调用。</p></div>
+      <div class="feat"><h3><span class="ico">✨</span>AI 总结</h3><p>自选模型（OpenRouter），对选定通知做摘要和要点提炼。</p></div>
+      <div class="feat"><h3><span class="ico">📌</span>重要记录</h3><p>从通知中提取关键事项，生成可追溯、可编辑、可删除的记录。</p></div>
+      <div class="feat"><h3><span class="ico">🌅</span>每日简报</h3><p>桌面小组件与通知晨间速览昨日重点。</p></div>
+      <div class="feat"><h3><span class="ico">📅</span>日历集成</h3><p>通知中的日程自动创建日历事件。</p></div>
+      <div class="feat"><h3><span class="ico">🔔</span>通知历史</h3><p>全部通知可回看、可搜索，按 App 和关键词筛选。</p></div>
+      <div class="feat"><h3><span class="ico">⏱️</span>自动处理</h3><p>可选 JobService 定时后台总结，无需手动触发。</p></div>
+      <div class="feat"><h3><span class="ico">🔒</span>端侧加密</h3><p>密钥与会话经 Android Keystore 加密，隐私不出手机。</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Screens -->
+<section id="screens">
+  <div class="wrap">
+    <h2 class="sec-title">界面</h2>
+    <p class="sec-desc">深色模式，核心操作都在一屏之内。</p>
+    <div class="shots">
+      <figure><img src="assets/03-home.jpg" alt="首页：当日通知与待总结数量"><figcaption>首页 · 当日通知与待办总览</figcaption></figure>
+      <figure><img src="assets/04-notifications.jpg" alt="通知列表：全部通知历史"><figcaption>通知 · 全量历史可搜索</figcaption></figure>
+      <figure><img src="assets/07-summary-result.jpg" alt="总结结果：AI 提炼的要点"><figcaption>总结 · AI 提炼核心事项</figcaption></figure>
+      <figure><img src="assets/09-records.jpg" alt="重要记录：自动沉淀的待办"><figcaption>记录 · 自动沉淀可追溯</figcaption></figure>
+      <figure><img src="assets/11-settings.jpg" alt="设置：模型与 API 配置"><figcaption>设置 · 自选模型与 Key</figcaption></figure>
+      <figure><img src="assets/12-openrouter.jpg" alt="OpenRouter 模型选择"><figcaption>模型 · 可选 OpenRouter 全模型</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Install -->
+<section id="install">
+  <div class="wrap">
+    <h2 class="sec-title">安装</h2>
+    <p class="sec-desc">三步开始，全程约两分钟。</p>
+    <div class="steps">
+      <div class="step"><div><h4>下载并安装 APK</h4><p>点击上方「下载 APK」。首次从浏览器安装时，按系统提示允许该来源；Play Protect 可能扫描并提示，属正常现象。</p></div></div>
+      <div class="step"><div><h4>授予通知监听权限</h4><p>打开 MindAI → 按引导开启「通知使用权」。仅采集你授权范围内的通知。</p></div></div>
+      <div class="step"><div><h4>配置 OpenRouter API Key</h4><p>设置中填入 Key，选择模型，即可开始总结。Key 仅存本地，只用于你的 AI 请求。</p></div></div>
+    </div>
+    <div style="height:18px"></div>
+    <div class="note">
+      <b>关于安装提示：</b>Android 从 8.0 起对「未知来源应用」逐应用授权，按提示允许即可。安装包经过 v2/v3 签名，可用下方校验值核对完整性。Google Play 上架准备中。
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Verify -->
+<section id="verify">
+  <div class="wrap">
+    <h2 class="sec-title">校验</h2>
+    <p class="sec-desc">v1.8.0 发布包信息，供技术用户核对。</p>
+    <div class="verify-box">
+      <div><span class="k">版本：</span><span class="v">v1.8.0</span></div>
+      <div><span class="k">文件名：</span><span class="v">MindAI.apk</span></div>
+      <div><span class="k">大小：</span><span class="v">1.1 MB（1,124,571 字节）</span></div>
+      <div><span class="k">SHA-256：</span><span class="v">8a8bc1dc3cca457b62e704ae6c1cb1356fc028ed508474e8d066a45ef92752a6</span></div>
+      <div><span class="k">签名证书 SHA-256：</span><span class="v">1ba08e251c7c450e071a3f0f341e7795cad22eab58e2b4bdb891667fd5200bc2</span></div>
+      <div style="margin-top:10px"><span class="k">本地校验命令：</span></div>
+      <div class="cmd">shasum -a 256 MindAI.apk</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Changelog -->
+<section id="changelog">
+  <div class="wrap">
+    <h2 class="sec-title">更新日志</h2>
+    <p class="sec-desc">主要版本节点。</p>
+    <div class="cl">
+      <div class="cl-item">
+        <h4>v1.8.0<span>2026-07</span></h4>
+        <ul>
+          <li>通知采集 / 广告过滤 / AI 总结 / 重要记录 / 每日简报完整链路</li>
+          <li>桌面小组件（2×2、4×4）与自动后台处理</li>
+          <li>43 项 instrumentation 测试通过，R8 混淆 + zipalign + v2/v3 签名</li>
+          <li>通过 Google Play 合规复核候选（上架前收尾项见仓库文档）</li>
+        </ul>
+      </div>
+      <div class="cl-item">
+        <h4>v1.6.0<span>2026-07</span></h4>
+        <ul>
+          <li>AI 总结范围可选（按 App / 按时间窗）</li>
+          <li>记录可编辑、可删除、可追溯来源</li>
+        </ul>
+      </div>
+      <div class="cl-item">
+        <h4>v1.3.0<span>2026-07</span></h4>
+        <ul>
+          <li>本地价值门槛过滤上线，广告营销通知零 AI 消耗</li>
+          <li>压力测试与性能优化（3000 通知 + 1000 待办无 crash/ANR）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="flinks">
+      <a href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/DanielHuangWong/MindAI/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/DanielHuangWong/MindAI/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+    </div>
+    <div>MindAI · 把通知变成记忆 · © 2026 Daniel Huang</div>
+  </div>
+</footer>
+
+</body>
+</html>

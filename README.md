@@ -2,6 +2,8 @@
 
 **Android notification intelligence — turn fleeting notifications into lasting memory.**
 
+🌐 项目主页：<https://danielhuangwong.github.io/MindAI/> · ⬇ [下载 APK](https://github.com/DanielHuangWong/MindAI/releases/latest/download/MindAI.apk)
+
 MindAI captures notifications you explicitly authorize, filters out ads and promotional noise, sends only selected content to AI for summarization, and extracts genuinely important items for your review. All raw data stays encrypted on-device.
 
 ## Features

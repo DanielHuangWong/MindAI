@@ -8,7 +8,7 @@ captures/
 
 # Sensitive / internal — not for public repo
 design/
-docs/
+docs/*.md
 google-play/
 dist/
 .DS_Store
