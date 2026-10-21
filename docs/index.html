@@ -3,8 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindAI — 把通知变成记忆</title>
-<meta name="description" content="MindAI 是一款 Android 通知智能助手：本地过滤广告、AI 提炼重点、重要事项自动沉淀，原始数据端侧加密不出手机。">
+<title>MindAI — 把通知变成记忆 | Android 通知智能助手</title>
+<meta name="description" content="MindAI 是一款开源 Android 通知智能助手：本地过滤广告噪音、AI 提炼真正重要的事、重要事项自动沉淀为可追溯的记录。原始数据端侧加密，不出你的手机。MIT 开源，免费使用。">
+<meta name="author" content="Daniel Huang">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0e1116">
+<link rel="canonical" href="https://danielhuangwong.github.io/MindAI/">
+
+<!-- Open Graph / 社交分享卡片 -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MindAI">
+<meta property="og:url" content="https://danielhuangwong.github.io/MindAI/">
+<meta property="og:title" content="MindAI — 把通知变成记忆">
+<meta property="og:description" content="开源 Android 通知智能助手：本地过滤广告噪音、AI 提炼重点、重要事项自动沉淀为可追溯的记录。原始数据端侧加密，不出手机。">
+<meta property="og:image" content="https://danielhuangwong.github.io/MindAI/assets/03-home.jpg">
+<meta property="og:image:width" content="853">
+<meta property="og:image:height" content="1844">
+<meta property="og:image:alt" content="MindAI 首页：当日通知与待总结数量总览">
+<meta property="og:locale" content="zh_CN">
+
+<!-- Twitter / X 卡片 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MindAI — 把通知变成记忆">
+<meta name="twitter:description" content="开源 Android 通知智能助手：本地过滤广告、AI 提炼重点、重要事项自动沉淀，数据端侧加密不出手机。">
+<meta name="twitter:image" content="https://danielhuangwong.github.io/MindAI/assets/03-home.jpg">
+
+<!-- 结构化数据：软件应用 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MindAI",
+  "alternateName": "安卓通知智能助手",
+  "url": "https://danielhuangwong.github.io/MindAI/",
+  "image": "https://danielhuangwong.github.io/MindAI/assets/03-home.jpg",
+  "description": "开源 Android 通知智能助手：本地过滤广告噪音、AI 提炼真正重要的事、自动沉淀为可追溯的记录。原始数据端侧加密，不出手机。",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "Android 8.0+",
+  "softwareVersion": "1.8.0",
+  "inLanguage": "zh-CN",
+  "license": "https://github.com/DanielHuangWong/MindAI/blob/main/LICENSE",
+  "isAccessibleForFree": true,
+  "author": { "@type": "Person", "name": "Daniel Huang", "url": "https://github.com/DanielHuangWong" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "downloadUrl": "https://github.com/DanielHuangWong/MindAI/releases/latest/download/MindAI.apk"
+}
+</script>
+<!-- 结构化数据：常见问题 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "MindAI 安全吗？通知内容会离开我的手机吗？",
+      "acceptedAnswer": { "@type": "Answer", "text": "未经你主动触发总结，通知内容不会离开设备。密钥与会话经 Android Keystore 加密存储；AI 总结需你自备 OpenRouter API Key，请求只发往该 Key 对应的账号。" } },
+    { "@type": "Question", "name": "MindAI 要付费吗？需要 API Key 吗？",
+      "acceptedAnswer": { "@type": "Answer", "text": "应用本身免费且开源（MIT）。AI 总结功能需自备 OpenRouter API Key；本地广告过滤与通知历史功能不需要 Key。" } },
+    { "@type": "Question", "name": "MindAI 支持哪些 Android 版本？",
+      "acceptedAnswer": { "@type": "Answer", "text": "Android 8.0（API 26）及以上。" } },
+    { "@type": "Question", "name": "MindAI 是开源的吗？",
+      "acceptedAnswer": { "@type": "Answer", "text": "是。源码托管在 GitHub，采用 MIT 协议，可自行构建与审计。" } }
+  ]
+}
+</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
   :root {
@@ -139,6 +201,20 @@
   .cl-item h4 span { color: var(--text-dim); font-weight: 400; font-size: 13px; margin-left: 8px; }
   .cl-item ul { margin: 4px 0 0 18px; font-size: 13.5px; color: var(--text-dim); }
 
+  /* FAQ */
+  .faq { display: grid; gap: 12px; max-width: 680px; }
+  .faq details {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 20px;
+  }
+  .faq summary {
+    cursor: pointer; font-weight: 600; font-size: 15px; list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; float: right; color: var(--accent); font-weight: 700; }
+  .faq details[open] summary::after { content: "−"; }
+  .faq details p { margin-top: 8px; font-size: 13.5px; color: var(--text-dim); }
+
   footer {
     border-top: 1px solid var(--border);
     padding: 32px 0 44px; text-align: center;
@@ -162,6 +238,7 @@
       <a href="#features">功能</a>
       <a href="#screens">截图</a>
       <a href="#install">安装</a>
+      <a href="#faq">常见问题</a>
       <a href="#changelog">更新日志</a>
       <a href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">GitHub</a>
     </div>
@@ -216,12 +293,12 @@
     <h2 class="sec-title">界面</h2>
     <p class="sec-desc">深色模式，核心操作都在一屏之内。</p>
     <div class="shots">
-      <figure><img src="assets/03-home.jpg" alt="首页：当日通知与待总结数量"><figcaption>首页 · 当日通知与待办总览</figcaption></figure>
-      <figure><img src="assets/04-notifications.jpg" alt="通知列表：全部通知历史"><figcaption>通知 · 全量历史可搜索</figcaption></figure>
-      <figure><img src="assets/07-summary-result.jpg" alt="总结结果：AI 提炼的要点"><figcaption>总结 · AI 提炼核心事项</figcaption></figure>
-      <figure><img src="assets/09-records.jpg" alt="重要记录：自动沉淀的待办"><figcaption>记录 · 自动沉淀可追溯</figcaption></figure>
-      <figure><img src="assets/11-settings.jpg" alt="设置：模型与 API 配置"><figcaption>设置 · 自选模型与 Key</figcaption></figure>
-      <figure><img src="assets/12-openrouter.jpg" alt="OpenRouter 模型选择"><figcaption>模型 · 可选 OpenRouter 全模型</figcaption></figure>
+      <figure><img src="assets/03-home.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI 首页：当日通知数量与待总结总览"><figcaption>首页 · 当日通知与待办总览</figcaption></figure>
+      <figure><img src="assets/04-notifications.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI 通知列表：全量通知历史可搜索"><figcaption>通知 · 全量历史可搜索</figcaption></figure>
+      <figure><img src="assets/07-summary-result.jpg" width="852" height="1846" loading="lazy" decoding="async" alt="MindAI 总结结果：AI 提炼的核心要点"><figcaption>总结 · AI 提炼核心事项</figcaption></figure>
+      <figure><img src="assets/09-records.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI 重要记录：自动沉淀的待办事项"><figcaption>记录 · 自动沉淀可追溯</figcaption></figure>
+      <figure><img src="assets/11-settings.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI 设置：模型选择与 OpenRouter API 配置"><figcaption>设置 · 自选模型与 Key</figcaption></figure>
+      <figure><img src="assets/12-openrouter.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI OpenRouter 模型选择列表"><figcaption>模型 · 可选 OpenRouter 全模型</figcaption></figure>
     </div>
   </div>
 </section>
@@ -297,6 +374,34 @@
       </div>
     </div>
   </div>
+</section>
+
+<hr class="divider">
+
+<!-- FAQ -->
+<section id="faq">
+<div class="wrap">
+  <h2 class="sec-title">常见问题</h2>
+  <p class="sec-desc">被问得最多的四件事。</p>
+  <div class="faq">
+    <details>
+      <summary>MindAI 安全吗？通知内容会离开我的手机吗？</summary>
+      <p>未经你主动触发总结，通知内容不会离开设备。密钥与会话经 Android Keystore 加密存储；AI 总结需你自备 OpenRouter API Key，请求只发往该 Key 对应的账号，不经过任何第三方中转服务器。</p>
+    </details>
+    <details>
+      <summary>MindAI 要付费吗？需要 API Key 吗？</summary>
+      <p>应用本身免费且开源（MIT）。AI 总结功能需自备 OpenRouter API Key，费用按 OpenRouter 账单结算；本地广告过滤、通知历史、每日简报等功能不需要 Key，也不产生费用。</p>
+    </details>
+    <details>
+      <summary>支持哪些 Android 版本？</summary>
+      <p>Android 8.0（API 26）及以上，覆盖目前市面上绝大多数在用的 Android 设备。</p>
+    </details>
+    <details>
+      <summary>MindAI 是开源的吗？</summary>
+      <p>是。源码托管在 GitHub，采用 MIT 协议，可自行构建、审计或二次开发。</p>
+    </details>
+  </div>
+</div>
 </section>
 
 <footer>

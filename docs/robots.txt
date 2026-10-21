@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danielhuangwong.github.io/MindAI/sitemap.xml
