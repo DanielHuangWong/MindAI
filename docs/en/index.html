@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindAI — Turn Notifications into Memory | Android Notification Assistant</title>
+<meta name="description" content="MindAI is an open-source Android notification assistant: it filters ad noise on-device, uses AI to surface what actually matters, and files important items as traceable records. Your raw data stays encrypted on your phone.">
+<meta name="author" content="Daniel Huang">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0e1116">
+<link rel="canonical" href="https://danielhuangwong.github.io/MindAI/en/">
+
+<!-- Open Graph / social cards -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MindAI">
+<meta property="og:url" content="https://danielhuangwong.github.io/MindAI/en/">
+<meta property="og:title" content="MindAI — Turn Notifications into Memory">
+<meta property="og:description" content="Open-source Android notification assistant: on-device ad filtering, AI summarization, and traceable records. Your raw data stays encrypted on your phone.">
+<meta property="og:image" content="https://danielhuangwong.github.io/MindAI/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MindAI — turn notifications into memory (Android notification assistant)">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MindAI — Turn Notifications into Memory">
+<meta name="twitter:description" content="Open-source Android notification assistant: on-device ad filtering, AI summarization, traceable records. Data stays encrypted on your phone.">
+<meta name="twitter:image" content="https://danielhuangwong.github.io/MindAI/assets/og-image.png">
+
+<!-- hreflang -->
+<link rel="alternate" hreflang="en" href="https://danielhuangwong.github.io/MindAI/en/">
+<link rel="alternate" hreflang="zh-CN" href="https://danielhuangwong.github.io/MindAI/">
+<link rel="alternate" hreflang="x-default" href="https://danielhuangwong.github.io/MindAI/en/">
+
+<!-- Structured data: software application -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MindAI",
+  "alternateName": "Android notification assistant",
+  "url": "https://danielhuangwong.github.io/MindAI/en/",
+  "image": "https://danielhuangwong.github.io/MindAI/assets/og-image.png",
+  "description": "Open-source Android notification assistant: filters ad noise on-device, uses AI to surface what matters, and files important items as traceable records. Raw data stays encrypted on your phone.",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "Android 8.0+",
+  "softwareVersion": "1.8.0",
+  "inLanguage": "en",
+  "license": "https://github.com/DanielHuangWong/MindAI/blob/main/LICENSE",
+  "isAccessibleForFree": true,
+  "author": { "@type": "Person", "name": "Daniel Huang", "url": "https://github.com/DanielHuangWong" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "downloadUrl": "https://github.com/DanielHuangWong/MindAI/releases/latest/download/MindAI.apk"
+}
+</script>
+<!-- Structured data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Is MindAI safe? Does my notification content leave my phone?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Notification content does not leave your device unless you explicitly trigger a summary. Keys and sessions are stored encrypted via Android Keystore. AI summaries require your own OpenRouter API key, so requests go only to the account behind that key." } },
+    { "@type": "Question", "name": "Is MindAI paid? Do I need an API key?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The app itself is free and open source (MIT). AI summarization requires your own OpenRouter API key; on-device ad filtering, notification history, and the daily briefing work without one and cost nothing." } },
+    { "@type": "Question", "name": "Which Android versions are supported?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Android 8.0 (API 26) and above — the vast majority of Android devices in use today." } },
+    { "@type": "Question", "name": "Is MindAI open source?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. The source is hosted on GitHub under the MIT license, so you can build it yourself and audit it." } }
+  ]
+}
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
+  :root {
+    --bg: #0e1116;
+    --bg-card: #161b22;
+    --bg-card2: #1c2330;
+    --text: #e6e9ef;
+    --text-dim: #9aa4b2;
+    --accent: #ffd23f;
+    --accent-dark: #c9a400;
+    --green: #3fb950;
+    --border: #2b3340;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,17,22,.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .logo { font-weight: 700; font-size: 18px; color: var(--text); letter-spacing: .5px; }
+  .logo span { color: var(--accent); }
+  nav .links { display: flex; gap: 22px; font-size: 14px; }
+  nav .links a { color: var(--text-dim); }
+  nav .links a:hover { color: var(--text); text-decoration: none; }
+
+  /* Hero */
+  .hero { padding: 84px 0 56px; text-align: center; }
+  .hero h1 { font-size: 44px; line-height: 1.25; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .sub { font-size: 18px; color: var(--text-dim); max-width: 640px; margin: 0 auto 30px; }
+  .badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 34px; }
+  .badge {
+    font-size: 12.5px; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 4px 12px; background: var(--bg-card);
+  }
+  .badge b { color: var(--text); font-weight: 600; }
+  .cta-row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; font-weight: 600; font-size: 16px;
+    padding: 13px 30px; border-radius: 10px; cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #111; box-shadow: 0 4px 18px rgba(255,210,63,.25); }
+  .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,210,63,.4); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); background: var(--bg-card); }
+  .ver-note { margin-top: 16px; font-size: 13px; color: var(--text-dim); }
+
+  /* Sections */
+  section { padding: 56px 0; }
+  .sec-title { font-size: 26px; margin-bottom: 8px; }
+  .sec-desc { color: var(--text-dim); margin-bottom: 28px; font-size: 15px; }
+  .divider { border: none; border-top: 1px solid var(--border); }
+
+  /* Features */
+  .feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .feat {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .feat h3 { font-size: 15.5px; margin-bottom: 6px; }
+  .feat h3 .ico { margin-right: 6px; }
+  .feat p { font-size: 13.5px; color: var(--text-dim); }
+
+  /* Screens */
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .shots figure {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .shots img { width: 100%; display: block; aspect-ratio: 853/1844; object-fit: cover; object-position: top; }
+  .shots figcaption { font-size: 12.5px; color: var(--text-dim); padding: 8px 12px; }
+
+  /* Install steps */
+  .steps { counter-reset: step; display: grid; gap: 12px; max-width: 640px; }
+  .step {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+  }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    flex: 0 0 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: #111;
+    font-weight: 700; display: flex; align-items: center; justify-content: center;
+  }
+  .step h4 { font-size: 15px; margin-bottom: 3px; }
+  .step p { font-size: 13.5px; color: var(--text-dim); }
+
+  /* Security note */
+  .note {
+    background: var(--bg-card2); border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--text-dim);
+  }
+  .note b { color: var(--text); }
+
+  /* Verify */
+  .verify-box {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+  }
+  .verify-box .k { color: var(--text-dim); }
+  .verify-box .v { color: var(--accent); word-break: break-all; }
+  .verify-box .cmd { color: var(--green); }
+
+  /* Changelog */
+  .cl { border-left: 2px solid var(--border); padding-left: 22px; display: grid; gap: 18px; }
+  .cl-item { position: relative; }
+  .cl-item::before {
+    content: ''; position: absolute; left: -27px; top: 8px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+  }
+  .cl-item h4 { font-size: 15px; }
+  .cl-item h4 span { color: var(--text-dim); font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .cl-item ul { margin: 4px 0 0 18px; font-size: 13.5px; color: var(--text-dim); }
+
+  /* FAQ */
+  .faq { display: grid; gap: 12px; max-width: 680px; }
+  .faq details {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 20px;
+  }
+  .faq summary {
+    cursor: pointer; font-weight: 600; font-size: 15px; list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; float: right; color: var(--accent); font-weight: 700; }
+  .faq details[open] summary::after { content: "−"; }
+  .faq details p { margin-top: 8px; font-size: 13.5px; color: var(--text-dim); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0 44px; text-align: center;
+    color: var(--text-dim); font-size: 13.5px;
+  }
+  footer .flinks { margin-bottom: 10px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+
+  @media (max-width: 720px) {
+    .hero h1 { font-size: 32px; }
+    .shots { grid-template-columns: repeat(2, 1fr); }
+    nav .links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">Mind<span>AI</span></div>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#screens">Screens</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+      <a href="#changelog">Changelog</a>
+      <a href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Turn <em>notifications</em> into <em>memory</em></h1>
+    <p class="sub">MindAI reads the notifications you authorize, filters ad noise on-device, uses AI to surface what actually matters, and files it as a traceable record. Your raw data stays encrypted on your phone.</p>
+    <div class="badges">
+      <div class="badge">Latest <b>v1.8.0</b></div>
+      <div class="badge">Android <b>8.0+</b> (API 26)</div>
+      <div class="badge">License <b>MIT</b></div>
+      <div class="badge">Data <b>on-device encrypted</b></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/DanielHuangWong/MindAI/releases/latest/download/MindAI.apk" target="_blank" rel="noopener">⬇ Download APK</a>
+      <a class="btn btn-ghost" href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">⭐ GitHub Source</a>
+    </div>
+    <p class="ver-note">AI features need your own <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a> API key · The download filename is always MindAI.apk, so this link keeps working across releases</p>
+  </div>
+</header>
+
+<hr class="divider">
+
+<!-- Features -->
+<section id="features">
+  <div class="wrap">
+    <h2 class="sec-title">Features</h2>
+    <p class="sec-desc">Notifications pass through. Only what gets distilled stays.</p>
+    <div class="feat-grid">
+      <div class="feat"><h3><span class="ico">📥</span>Notification capture</h3><p>Reads notifications after you grant access. Nothing leaves the device until you trigger a summary.</p></div>
+      <div class="feat"><h3><span class="ico">🧹</span>Ad filtering</h3><p>An on-device value threshold drops ads, marketing and low-signal notifications before they ever cost an AI call.</p></div>
+      <div class="feat"><h3><span class="ico">✨</span>AI summarization</h3><p>Pick your own model (via OpenRouter) to summarize and extract key points from selected notifications.</p></div>
+      <div class="feat"><h3><span class="ico">📌</span>Important records</h3><p>Extracts key items from notifications into records you can trace back, edit, and delete.</p></div>
+      <div class="feat"><h3><span class="ico">🌅</span>Daily briefing</h3><p>A home-screen widget and a morning notification recap of yesterday's key points.</p></div>
+      <div class="feat"><h3><span class="ico">📅</span>Calendar integration</h3><p>Events found in notifications are turned into calendar entries automatically.</p></div>
+      <div class="feat"><h3><span class="ico">🔔</span>Notification history</h3><p>Every notification is reviewable and searchable, filterable by app and keyword.</p></div>
+      <div class="feat"><h3><span class="ico">⏱️</span>Background processing</h3><p>Optional JobService summaries on a schedule, with no manual trigger required.</p></div>
+      <div class="feat"><h3><span class="ico">🔒</span>On-device encryption</h3><p>Keys and sessions are encrypted through Android Keystore. Your data stays on your phone.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Screens -->
+<section id="screens">
+  <div class="wrap">
+    <h2 class="sec-title">Screens</h2>
+    <p class="sec-desc">Dark mode, with every core action within one screen.</p>
+    <div class="shots">
+      <figure><img src="../assets/03-home.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI home screen: today's notification count and pending summaries"><figcaption>Home · today's notifications at a glance</figcaption></figure>
+      <figure><img src="../assets/04-notifications.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI notification list: full searchable history"><figcaption>Notifications · full searchable history</figcaption></figure>
+      <figure><img src="../assets/07-summary-result.jpg" width="852" height="1846" loading="lazy" decoding="async" alt="MindAI summary result: key points extracted by AI"><figcaption>Summary · AI-extracted key points</figcaption></figure>
+      <figure><img src="../assets/09-records.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI important records: automatically filed action items"><figcaption>Records · traceable and editable</figcaption></figure>
+      <figure><img src="../assets/11-settings.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI settings: model selection and OpenRouter API configuration"><figcaption>Settings · pick your model and key</figcaption></figure>
+      <figure><img src="../assets/12-openrouter.jpg" width="853" height="1844" loading="lazy" decoding="async" alt="MindAI OpenRouter model picker"><figcaption>Models · the full OpenRouter catalog</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Install -->
+<section id="install">
+  <div class="wrap">
+    <h2 class="sec-title">Install</h2>
+    <p class="sec-desc">Three steps, about two minutes total.</p>
+    <div class="steps">
+      <div class="step"><div><h4>Download and install the APK</h4><p>Tap "Download APK" above. On first install from a browser, allow the source when prompted; Play Protect may scan and warn, which is expected.</p></div></div>
+      <div class="step"><div><h4>Grant notification access</h4><p>Open MindAI and follow the prompt to enable notification access. Only notifications within the scope you authorize are read.</p></div></div>
+      <div class="step"><div><h4>Add your OpenRouter API key</h4><p>Enter your key in Settings, pick a model, and you're summarizing. The key is stored locally and used only for your own AI requests.</p></div></div>
+    </div>
+    <div style="height:18px"></div>
+    <div class="note">
+      <b>About install warnings:</b> Since Android 8.0, "unknown sources" is granted per app — just allow it when prompted. The package is signed with v2/v3 and you can verify it against the checksums below. Google Play listing is in preparation.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Verify -->
+<section id="verify">
+  <div class="wrap">
+    <h2 class="sec-title">Verify</h2>
+    <p class="sec-desc">v1.8.0 release details, for technical users who want to check.</p>
+    <div class="verify-box">
+      <div><span class="k">Version:</span><span class="v">v1.8.0</span></div>
+      <div><span class="k">Filename:</span><span class="v">MindAI.apk</span></div>
+      <div><span class="k">Size:</span><span class="v">1.1 MB (1,124,571 bytes)</span></div>
+      <div><span class="k">SHA-256:</span><span class="v">8a8bc1dc3cca457b62e704ae6c1cb1356fc028ed508474e8d066a45ef92752a6</span></div>
+      <div><span class="k">Signing cert SHA-256:</span><span class="v">1ba08e251c7c450e071a3f0f341e7795cad22eab58e2b4bdb891667fd5200bc2</span></div>
+      <div style="margin-top:10px"><span class="k">Verify locally:</span></div>
+      <div class="cmd">shasum -a 256 MindAI.apk</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Changelog -->
+<section id="changelog">
+  <div class="wrap">
+    <h2 class="sec-title">Changelog</h2>
+    <p class="sec-desc">Major release milestones.</p>
+    <div class="cl">
+      <div class="cl-item">
+        <h4>v1.8.0<span>2026-07</span></h4>
+        <ul>
+          <li>Full pipeline: notification capture / ad filtering / AI summary / important records / daily briefing</li>
+          <li>Home-screen widgets (2×2, 4×4) and scheduled background processing</li>
+          <li>43 instrumentation tests passing; R8 obfuscation + zipalign + v2/v3 signing</li>
+          <li>Candidate for Google Play compliance review (remaining items in repo docs)</li>
+        </ul>
+      </div>
+      <div class="cl-item">
+        <h4>v1.6.0<span>2026-07</span></h4>
+        <ul>
+          <li>Optional AI summary scope (by app / by time window)</li>
+          <li>Records editable, deletable, and traceable to their source</li>
+        </ul>
+      </div>
+      <div class="cl-item">
+        <h4>v1.3.0<span>2026-07</span></h4>
+        <ul>
+          <li>On-device value-threshold filtering shipped; ads cost zero AI calls</li>
+          <li>Stress testing and performance tuning (3,000 notifications + 1,000 records, no crash/ANR)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <h2 class="sec-title">FAQ</h2>
+    <p class="sec-desc">The four questions people ask most.</p>
+    <div class="faq">
+      <details>
+        <summary>Is MindAI safe? Does my notification content leave my phone?</summary>
+        <p>Notification content does not leave your device unless you explicitly trigger a summary. Keys and sessions are stored encrypted via Android Keystore; AI summaries require your own OpenRouter API key, so requests go only to the account behind that key — no third-party relay server is involved.</p>
+      </details>
+      <details>
+        <summary>Is MindAI paid? Do I need an API key?</summary>
+        <p>The app itself is free and open source (MIT). AI summarization requires your own OpenRouter API key, billed by OpenRouter. On-device ad filtering, notification history, and the daily briefing need no key and cost nothing.</p>
+      </details>
+      <details>
+        <summary>Which Android versions are supported?</summary>
+        <p>Android 8.0 (API 26) and above, covering the vast majority of Android devices in use today.</p>
+      </details>
+      <details>
+        <summary>Is MindAI open source?</summary>
+        <p>Yes. The source is hosted on GitHub under the MIT license — build it yourself, audit it, or fork it.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="flinks">
+      <a href="https://github.com/DanielHuangWong/MindAI" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/DanielHuangWong/MindAI/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/DanielHuangWong/MindAI/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+      <a href="https://danielhuangwong.github.io/MindAI/">中文版</a>
+    </div>
+    <div>MindAI · Turn notifications into memory · © 2026 Daniel Huang</div>
+  </div>
+</footer>
+
+</body>
+</html>
